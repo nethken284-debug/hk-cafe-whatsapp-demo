@@ -29,6 +29,14 @@ window.SHOP_CONFIG = {
   description:
     "深水埗街坊咖啡店，每週自家烘焙咖啡豆，供應咖啡、港式特飲、輕食及甜品，可經 WhatsApp 預先落單。",
 
+  // 分享預覽（在 WhatsApp、Facebook、Carousell 等貼連結時顯示）。執行 node build.js 時自動寫入網頁。
+  share: {
+    siteUrl: "https://nethken284-debug.github.io/hk-cafe-whatsapp-demo/", // 網站正式網址，結尾要有 /
+    image: "assets/og-image.jpg", // 分享預覽圖：每間店一張，建議 1200×630 的 JPG（300KB 以下，WhatsApp 才穩定顯示）
+    title: "", // 留空 ＝ 店名＋英文名＋首屏小字
+    description: "", // 留空 ＝ 用上面的 description
+  },
+
   about: {
     paragraphs: [
       "巷光咖啡開在深水埗一條安靜的小巷裏。每天清早，我們先把咖啡豆磨好、把多士烘香，等街坊上班前來帶走一杯。",

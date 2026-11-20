@@ -64,7 +64,6 @@
     return wrap.firstChild;
   }
   const safeUrl = (u) => (/^(https?:|mailto:|tel:)/i.test(u) ? u : "");
-  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => "&#" + c.charCodeAt(0) + ";");
 
   function mapUrl() {
     const own = safeUrl(M.contact.mapUrl);
@@ -73,7 +72,7 @@
     return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(q);
   }
 
-  /* ---------- 顏色、標題、網站小圖示 ---------- */
+  /* ---------- 顏色 ---------- */
   function applyTheme() {
     ["brand", "accent", "ink", "paper"].forEach((k) => {
       const v = M.theme[k];
@@ -88,55 +87,7 @@
     if (meta && M.theme.paper) meta.setAttribute("content", M.theme.paper);
   }
 
-  function applyMeta() {
-    document.title = M.name + (M.nameEn ? " " + M.nameEn : "") + (M.kicker ? "｜" + M.kicker : "");
-    const desc = $('meta[name="description"]');
-    if (desc && M.description) desc.setAttribute("content", M.description);
-
-    // 網站小圖示：主色圓形配店名第一個字
-    const color = getComputedStyle(root).getPropertyValue("--brand").trim() || "#b23a1e";
-    const svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="' +
-      esc(color) +
-      '"/><text x="32" y="43" font-size="32" font-weight="700" text-anchor="middle" fill="#fff" font-family="serif">' +
-      esc(Array.from(M.name)[0] || "") +
-      "</text></svg>";
-    const link = $('link[rel="icon"]');
-    if (link) link.href = "data:image/svg+xml," + encodeURIComponent(svg);
-
-    if (M.demo) {
-      // 示範網站：要求搜尋引擎不要收錄，避免虛構店舖出現在搜尋結果
-      document.head.append(h("meta", { name: "robots", content: "noindex" }));
-    } else {
-      addStructuredData();
-    }
-  }
-
-  // 搜尋引擎用的店舖資料（JSON-LD），示範模式不會加入
-  function addStructuredData() {
-    const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const url = location.href.split("#")[0];
-    const data = {
-      "@context": "https://schema.org",
-      "@type": C.str(raw.schemaType) || "CafeOrCoffeeShop",
-      name: M.name,
-      alternateName: M.nameEn || undefined,
-      description: M.description || undefined,
-      url,
-      hasMenu: url + "#menu",
-      telephone: M.contact.phone ? "+" + M.contact.phone : undefined,
-      address: M.contact.address
-        ? { "@type": "PostalAddress", streetAddress: M.contact.address, addressCountry: "HK" }
-        : undefined,
-      openingHoursSpecification: M.hours.map((r) => ({
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: r.days.map((d) => DAYS[d]),
-        opens: C.fmtHM(r.open),
-        closes: C.fmtHM(r.close),
-      })),
-    };
-    document.head.append(h("script", { type: "application/ld+json" }, JSON.stringify(data)));
-  }
+  // <title>、description、分享預覽、noindex 及網站小圖示由 build.js 按 config.js 產生
 
   /* ---------- 文字欄位 ---------- */
   function bindText() {
@@ -403,7 +354,6 @@
 
   /* ---------- 開始 ---------- */
   applyTheme();
-  applyMeta();
   bindText();
   renderHero();
   renderAbout();

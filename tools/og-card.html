@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<title>分享預覽圖產生器</title>
+<!--
+  用法：用 Chrome 打開這個檔案，畫面會按 ../config.js 畫出 1200×630 的分享預覽圖。
+  把它截圖儲存為 assets/og-image.png（或用 README 內的一行指令自動截圖），
+  再在 config.js 的 share.image 指定檔案即可。也可以改用店舖自己的相片（1200×630）。
+-->
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  .card { position: relative; display: grid; grid-template-columns: 1fr 420px; align-items: center; gap: 40px;
+    width: 1200px; height: 630px; padding: 0 90px 0 96px; box-sizing: border-box; }
+  .card::before { content: ""; position: absolute; inset: auto -200px -260px auto; width: 760px; height: 760px; z-index: -1;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 30%, transparent), transparent); }
+  .k { color: var(--brand); font-size: 26px; font-weight: 800; letter-spacing: .24em; }
+  .n { margin: 18px 0 0; font-family: var(--f-serif); font-size: 128px; line-height: 1.04; letter-spacing: .08em; }
+  .e { margin-top: 14px; color: var(--brand); font-family: var(--f-display); font-style: italic; font-size: 40px; }
+  .t { margin-top: 26px; color: var(--ink-2); font-size: 30px; line-height: 1.6; max-width: 19em; }
+  .pill { display: inline-flex; margin-top: 34px; padding: 12px 26px; border-radius: 999px; background: var(--ink);
+    color: var(--paper); font-size: 24px; font-weight: 800; letter-spacing: .08em; }
+  .demo { position: absolute; top: 28px; right: 32px; padding: 6px 16px; border: 2px dashed var(--brand); border-radius: 999px;
+    color: var(--brand); font-size: 20px; font-weight: 800; letter-spacing: .1em; }
+  .art { width: 420px; align-self: end; }
+  .a-steam path, .a-spark path, .status-dot { animation: none !important; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div>
+      <div class="k" id="k"></div>
+      <div class="n" id="n"></div>
+      <div class="e" id="e" lang="en"></div>
+      <div class="t" id="t"></div>
+      <div class="pill" id="p">WhatsApp 預先落單</div>
+    </div>
+    <div class="art">
+      <svg class="hero-svg" viewBox="0 0 420 480" focusable="false">
+          <defs>
+            <radialGradient id="hg-glow" cx="50%" cy="34%" r="62%">
+              <stop offset="0" stop-color="#FFE9B8"/>
+              <stop offset=".38" stop-color="#F0B060" stop-opacity=".7"/>
+              <stop offset="1" stop-color="#F0B060" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="hg-arch"><path d="M74 480V214a136 136 0 0 1 272 0v266z"/></clipPath>
+            <pattern id="hg-tiles" width="24" height="24" patternUnits="userSpaceOnUse">
+              <rect class="t-0" width="24" height="24"/>
+              <rect class="t-1" x="1.5" y="1.5" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-1" x="13" y="13" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-2" x="13" y="1.5" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-2" x="1.5" y="13" width="9.5" height="9.5" rx="1.5"/>
+            </pattern>
+          </defs>
+          <circle class="a-sun" cx="352" cy="92" r="46"/>
+          <path class="a-frame" d="M50 480V214a160 160 0 0 1 320 0v266z"/>
+          <g clip-path="url(#hg-arch)">
+            <rect class="a-inside" width="420" height="480"/>
+            <circle cx="210" cy="196" r="210" fill="url(#hg-glow)"/>
+            <g class="a-jars">
+              <rect x="104" y="226" width="16" height="24" rx="4"/>
+              <rect x="126" y="232" width="14" height="18" rx="3"/>
+              <rect x="146" y="222" width="12" height="28" rx="3"/>
+              <rect x="262" y="230" width="18" height="20" rx="4"/>
+              <rect x="286" y="224" width="12" height="26" rx="3"/>
+              <rect x="304" y="234" width="14" height="16" rx="3"/>
+            </g>
+            <path class="a-shelf" d="M92 251h76M252 251h76"/>
+            <path class="a-cord" d="M210 78v70"/>
+            <path class="a-lamp" d="M180 178h60l-11-30h-38z"/>
+            <ellipse class="a-bulb" cx="210" cy="180" rx="12" ry="5.5"/>
+            <rect class="a-counter" y="372" width="420" height="18"/>
+            <rect y="390" width="420" height="90" fill="url(#hg-tiles)"/>
+          </g>
+          <ellipse class="a-shadow" cx="214" cy="377" rx="84" ry="10"/>
+          <ellipse class="a-saucer" cx="210" cy="371" rx="78" ry="11"/>
+          <path class="a-handle" d="M265 318c24-8 36 6 31 21s-21 20-40 15"/>
+          <path class="a-cup" d="M152 300h116l-10 56a24 24 0 0 1-24 20h-48a24 24 0 0 1-24-20z"/>
+          <path class="a-band" d="M154.5 314h111l-1.6 9h-107.8z"/>
+          <ellipse class="a-coffee" cx="210" cy="300" rx="58" ry="10"/>
+          <path class="a-art" d="M210 309c-9-5-13-9-8-12 3-2 6-1 8 2 2-3 5-4 8-2 5 3 1 7-8 12z"/>
+          <g class="a-steam">
+            <path d="M186 282c-9-13 9-21 0-35s9-21 0-34"/>
+            <path d="M210 278c-9-13 9-21 0-35s9-21 0-34"/>
+            <path d="M234 282c-9-13 9-21 0-35s9-21 0-34"/>
+          </g>
+          <g class="a-spark">
+            <path d="M112 132l3.5 8.5 8.5 3.5-8.5 3.5-3.5 8.5-3.5-8.5-8.5-3.5 8.5-3.5z"/>
+            <path d="M318 168l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/>
+            <path d="M300 96l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+          </g>
+        </svg>
+    </div>
+    <div class="demo" id="d" hidden>示範作品</div>
+  </div>
+  <script src="../config.js"></script>
+  <script>
+    var c = window.SHOP_CONFIG || {}, t = c.theme || {};
+    ["brand", "accent", "ink", "paper"].forEach(function (k) { if (t[k]) document.documentElement.style.setProperty("--" + k, t[k]); });
+    document.getElementById("k").textContent = c.kicker || "";
+    document.getElementById("n").textContent = c.name || "";
+    document.getElementById("e").textContent = c.nameEn || "";
+    document.getElementById("t").textContent = c.tagline || "";
+    if (!c.order || c.order.enabled === false) document.getElementById("p").hidden = true;
+    document.getElementById("d").hidden = !c.demo;
+  </script>
+</body>
+</html>
