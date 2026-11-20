@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!--
+    以下 title、description 及 og: 標籤是給搜尋引擎和 WhatsApp／Facebook 分享預覽用的。
+    這些工具不會執行 JavaScript，不會讀取 config.js，所以換店時請一併修改這幾行。
+  -->
+  <title>巷光咖啡 Lanelight Coffee｜深水埗・自家烘焙</title>
+  <meta name="description" content="深水埗街坊咖啡店，每週自家烘焙咖啡豆，供應咖啡、港式特飲、輕食及甜品，可經 WhatsApp 預先落單。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="巷光咖啡 Lanelight Coffee">
+  <meta property="og:description" content="小巷裏的一盞燈，一杯慢慢沖好的咖啡。可經 WhatsApp 預先落單。">
+  <meta name="theme-color" content="#F5EEE4">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <script>document.documentElement.classList.add("js")</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="config.js" defer></script>
+  <script src="assets/core.js" defer></script>
+  <script src="assets/site.js" defer></script>
+  <script src="assets/order.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#menu">跳到菜單</a>
+  <div class="config-error" id="configError" role="alert" hidden></div>
+
+  <header class="hero" id="top">
+    <nav class="topbar wrap" aria-label="主選單">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true" data-bind="initial"></span>
+        <span class="brand-name" data-bind="name"></span>
+      </a>
+      <ul class="topnav">
+        <li><a href="#menu">菜單</a></li>
+        <li><a href="#hours">時間</a></li>
+        <li><a href="#contact">地址</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero-inner wrap">
+      <div class="hero-copy">
+        <p class="kicker" data-bind="kicker"></p>
+        <h1 class="hero-title">
+          <span class="hero-name" data-bind="name"></span>
+          <span class="hero-en" lang="en" data-bind="nameEn"></span>
+        </h1>
+        <p class="hero-tagline" data-bind="tagline"></p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#menu" id="heroOrder">立即落單</a>
+          <a class="btn btn-outline" href="#contact" id="heroMap">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.8" r="2.3"/></svg>
+            Google 地圖導航
+          </a>
+        </div>
+        <p class="status" id="heroStatus" hidden><span class="status-dot" aria-hidden="true"></span><span class="status-text"></span></p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <svg class="hero-svg" viewBox="0 0 420 480" focusable="false">
+          <defs>
+            <radialGradient id="hg-glow" cx="50%" cy="34%" r="62%">
+              <stop offset="0" stop-color="#FFE9B8"/>
+              <stop offset=".38" stop-color="#F0B060" stop-opacity=".7"/>
+              <stop offset="1" stop-color="#F0B060" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="hg-arch"><path d="M74 480V214a136 136 0 0 1 272 0v266z"/></clipPath>
+            <pattern id="hg-tiles" width="24" height="24" patternUnits="userSpaceOnUse">
+              <rect class="t-0" width="24" height="24"/>
+              <rect class="t-1" x="1.5" y="1.5" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-1" x="13" y="13" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-2" x="13" y="1.5" width="9.5" height="9.5" rx="1.5"/>
+              <rect class="t-2" x="1.5" y="13" width="9.5" height="9.5" rx="1.5"/>
+            </pattern>
+          </defs>
+          <circle class="a-sun" cx="352" cy="92" r="46"/>
+          <path class="a-frame" d="M50 480V214a160 160 0 0 1 320 0v266z"/>
+          <g clip-path="url(#hg-arch)">
+            <rect class="a-inside" width="420" height="480"/>
+            <circle cx="210" cy="196" r="210" fill="url(#hg-glow)"/>
+            <g class="a-jars">
+              <rect x="104" y="226" width="16" height="24" rx="4"/>
+              <rect x="126" y="232" width="14" height="18" rx="3"/>
+              <rect x="146" y="222" width="12" height="28" rx="3"/>
+              <rect x="262" y="230" width="18" height="20" rx="4"/>
+              <rect x="286" y="224" width="12" height="26" rx="3"/>
+              <rect x="304" y="234" width="14" height="16" rx="3"/>
+            </g>
+            <path class="a-shelf" d="M92 251h76M252 251h76"/>
+            <path class="a-cord" d="M210 78v70"/>
+            <path class="a-lamp" d="M180 178h60l-11-30h-38z"/>
+            <ellipse class="a-bulb" cx="210" cy="180" rx="12" ry="5.5"/>
+            <rect class="a-counter" y="372" width="420" height="18"/>
+            <rect y="390" width="420" height="90" fill="url(#hg-tiles)"/>
+          </g>
+          <ellipse class="a-shadow" cx="214" cy="377" rx="84" ry="10"/>
+          <ellipse class="a-saucer" cx="210" cy="371" rx="78" ry="11"/>
+          <path class="a-handle" d="M265 318c24-8 36 6 31 21s-21 20-40 15"/>
+          <path class="a-cup" d="M152 300h116l-10 56a24 24 0 0 1-24 20h-48a24 24 0 0 1-24-20z"/>
+          <path class="a-band" d="M154.5 314h111l-1.6 9h-107.8z"/>
+          <ellipse class="a-coffee" cx="210" cy="300" rx="58" ry="10"/>
+          <path class="a-art" d="M210 309c-9-5-13-9-8-12 3-2 6-1 8 2 2-3 5-4 8-2 5 3 1 7-8 12z"/>
+          <g class="a-steam">
+            <path d="M186 282c-9-13 9-21 0-35s9-21 0-34"/>
+            <path d="M210 278c-9-13 9-21 0-35s9-21 0-34"/>
+            <path d="M234 282c-9-13 9-21 0-35s9-21 0-34"/>
+          </g>
+          <g class="a-spark">
+            <path d="M112 132l3.5 8.5 8.5 3.5-8.5 3.5-3.5 8.5-3.5-8.5-8.5-3.5 8.5-3.5z"/>
+            <path d="M318 168l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/>
+            <path d="M300 96l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <div class="about-head">
+          <p class="eyebrow" lang="en">01 — Our story</p>
+          <h2 class="section-title" id="about-title">關於我們</h2>
+        </div>
+        <div class="about-body">
+          <div class="about-text" id="aboutText"></div>
+          <ul class="highlights" id="aboutHighlights"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section menu" id="menu" aria-labelledby="menu-title">
+      <div class="awning" aria-hidden="true"></div>
+      <div class="wrap menu-head">
+        <div>
+          <p class="eyebrow" lang="en">02 — Menu</p>
+          <h2 class="section-title" id="menu-title">菜單</h2>
+        </div>
+        <div class="how-to order-only">
+          <ol class="steps">
+            <li><span class="step-n" aria-hidden="true">1</span>加入餐點</li>
+            <li><span class="step-n" aria-hidden="true">2</span>填寫取餐資料</li>
+            <li><span class="step-n" aria-hidden="true">3</span>經 WhatsApp 發送</li>
+          </ol>
+          <p class="notice" data-bind="notice"></p>
+        </div>
+      </div>
+      <nav class="cat-nav" aria-label="菜單分類">
+        <div class="cat-nav-inner wrap" id="catNav"></div>
+      </nav>
+      <div class="wrap" id="menuList"></div>
+    </section>
+
+    <div class="night">
+      <div class="wrap night-grid">
+        <section class="info" id="hours" aria-labelledby="hours-title">
+          <p class="eyebrow" lang="en">03 — Opening hours</p>
+          <h2 class="section-title" id="hours-title">營業時間</h2>
+          <p class="status status-lg" id="hoursStatus" hidden><span class="status-dot" aria-hidden="true"></span><span class="status-text"></span></p>
+          <dl class="hours-list" id="hoursList"></dl>
+          <p class="fine" id="hoursNote"></p>
+        </section>
+
+        <section class="info" id="contact" aria-labelledby="contact-title">
+          <p class="eyebrow" lang="en">04 — Find us</p>
+          <h2 class="section-title" id="contact-title">地址及聯絡</h2>
+          <svg class="mini-map" viewBox="0 0 320 170" aria-hidden="true" focusable="false">
+            <rect class="m-bg" width="320" height="170" rx="18"/>
+            <g class="m-blocks">
+              <rect x="18" y="14" width="68" height="46" rx="6"/>
+              <rect x="112" y="14" width="88" height="38" rx="6"/>
+              <rect x="226" y="10" width="78" height="34" rx="6"/>
+              <rect x="18" y="104" width="62" height="52" rx="6"/>
+              <rect x="236" y="104" width="68" height="52" rx="6"/>
+            </g>
+            <path class="m-road" d="M-10 100L330 66"/>
+            <path class="m-road m-thin" d="M98-10l18 200"/>
+            <path class="m-road m-thin" d="M216-10l8 200"/>
+            <g class="m-pin" transform="translate(166 96)">
+              <path d="M0 0c-14-14-21-24-21-34a21 21 0 0 1 42 0c0 10-7 20-21 34z"/>
+              <circle cy="-34" r="7.5"/>
+            </g>
+          </svg>
+          <ul class="contact-list" id="contactList"></ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p class="footer-brand"><span data-bind="name"></span> <span lang="en" data-bind="nameEn"></span></p>
+      <p class="footer-demo" id="footerDemo" hidden>示範作品・店名及內容純屬虛構</p>
+      <p class="footer-copy" id="footerCopy"></p>
+      <p class="footer-credit" id="footerCredit" hidden></p>
+    </div>
+  </footer>
+
+  <!-- 底部購物清單列 -->
+  <div class="cartbar order-only" id="cartBar">
+    <button type="button" class="cartbar-btn" id="cartOpen" aria-haspopup="dialog" aria-controls="cartDialog">
+      <span class="cartbar-icon" aria-hidden="true">
+        <svg class="i" viewBox="0 0 24 24"><path d="M5.5 8h13l-1.2 12.2a1 1 0 0 1-1 .8H7.7a1 1 0 0 1-1-.8L5.5 8Z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></svg>
+        <span class="cartbar-count" id="cartCount">0</span>
+      </span>
+      <span class="cartbar-text">
+        <span class="cartbar-title">購物清單</span>
+        <span class="cartbar-sub" id="cartSub">未有餐點</span>
+      </span>
+      <span class="cartbar-total" id="cartBarTotal">$0</span>
+      <span class="cartbar-cta" aria-hidden="true">查看</span>
+    </button>
+  </div>
+
+  <!-- 選項（溫度、甜度等） -->
+  <dialog class="sheet sheet-opt" id="optDialog" aria-labelledby="optTitle">
+    <form class="sheet-inner" id="optForm" method="dialog">
+      <div class="sheet-head">
+        <div>
+          <h3 class="sheet-title" id="optTitle"></h3>
+          <p class="sheet-sub" id="optDesc"></p>
+        </div>
+        <button type="button" class="icon-btn" data-close aria-label="關閉">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body" id="optGroups"></div>
+      <div class="sheet-foot opt-foot">
+        <div class="stepper" role="group" aria-label="數量">
+          <button type="button" class="step-btn" id="optDec" aria-label="減少數量">−</button>
+          <output class="step-qty" id="optQty" aria-live="polite">1</output>
+          <button type="button" class="step-btn" id="optInc" aria-label="增加數量">+</button>
+        </div>
+        <button type="submit" class="btn btn-primary btn-grow" id="optAdd">加入清單</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 購物清單及取餐資料 -->
+  <dialog class="sheet sheet-cart" id="cartDialog" aria-labelledby="cartTitle">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h3 class="sheet-title" id="cartTitle">購物清單</h3>
+        <button type="button" class="icon-btn" data-close aria-label="關閉購物清單">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div class="cart-empty" id="cartEmpty">
+          <p>清單仍是空的，先到菜單揀選餐點吧。</p>
+          <button type="button" class="btn btn-outline btn-sm" id="cartBrowse">返回菜單</button>
+        </div>
+        <ul class="cart-lines" id="cartLines"></ul>
+        <div class="cart-sum" id="cartSum">
+          <span>合共 <span id="cartQty">0</span> 件</span>
+          <strong class="cart-total" id="cartTotal">$0</strong>
+        </div>
+
+        <form class="checkout" id="checkoutForm" novalidate>
+          <h4 class="checkout-title">取餐資料</h4>
+          <div class="field">
+            <label for="fName">稱呼</label>
+            <input class="input" id="fName" name="name" type="text" autocomplete="name" maxlength="20" placeholder="例如：陳先生" aria-describedby="fNameErr">
+            <p class="field-error" id="fNameErr"></p>
+          </div>
+          <fieldset class="field" id="modeField">
+            <legend>取餐方式</legend>
+            <div class="pills" id="modePills"></div>
+            <p class="field-error" id="fModeErr"></p>
+          </fieldset>
+          <div id="pickupFields">
+            <fieldset class="field" id="dateField">
+              <legend>取餐日期</legend>
+              <div class="pills" id="datePills"></div>
+            </fieldset>
+            <div class="field">
+              <label for="fTime">自取時間</label>
+              <input class="input input-time" id="fTime" name="time" type="time" step="300" aria-describedby="fTimeHint fTimeErr">
+              <p class="field-hint"><span id="fTimeHint"></span> <button type="button" class="link-btn" id="fTimeFill">填入最早時間</button></p>
+              <p class="field-error" id="fTimeErr"></p>
+            </div>
+          </div>
+          <div class="field" id="dineFields" hidden>
+            <label for="fTable">枱號</label>
+            <input class="input" id="fTable" name="table" type="text" inputmode="numeric" maxlength="6" placeholder="例如：5" aria-describedby="fTableErr">
+            <p class="field-error" id="fTableErr"></p>
+          </div>
+          <div class="field">
+            <label for="fNote">備註（選填）</label>
+            <textarea class="input" id="fNote" name="note" rows="2" maxlength="100" placeholder="例如：少冰、不用餐具"></textarea>
+          </div>
+          <p class="notice" data-bind="notice"></p>
+        </form>
+      </div>
+      <div class="sheet-foot">
+        <p class="form-error" id="formError" role="alert"></p>
+        <button type="submit" form="checkoutForm" class="btn btn-primary btn-block">預覽訂單</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 訂單預覽 -->
+  <dialog class="modal" id="previewDialog" aria-labelledby="previewTitle">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h3 class="sheet-title" id="previewTitle">訂單預覽</h3>
+        <button type="button" class="icon-btn" data-close aria-label="關閉訂單預覽">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <p class="modal-lead">以下訊息會經 WhatsApp 發送至「<span data-bind="name"></span>」（<span id="previewNumber"></span>），請確認內容無誤。</p>
+        <div class="chat"><pre class="bubble" id="previewText"></pre></div>
+        <p class="fine">按「用 WhatsApp 發送」後，WhatsApp 會開啟並填好訊息，請在 WhatsApp 內再按一次發送。</p>
+        <p class="demo-note" id="demoNote" hidden>示範網站：WhatsApp 號碼為虛構，開啟後 WhatsApp 會提示號碼無效，這是正常的。</p>
+        <div class="sent" id="sentPanel" hidden>
+          <p><strong>已開啟 WhatsApp。</strong>在 WhatsApp 按發送後，請等候店舖回覆確認訂單。</p>
+        </div>
+      </div>
+      <div class="sheet-foot modal-actions" id="previewActions">
+        <button type="button" class="btn btn-outline" data-close>返回修改</button>
+        <a class="btn btn-wa" id="waSend" href="#" target="_blank" rel="noopener">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5Z"/><path d="M9 9.5c.3 2.3 2.2 4.3 4.6 4.8l1.2-1.2 1.7.8"/></svg>
+          用 WhatsApp 發送
+        </a>
+      </div>
+      <div class="sheet-foot modal-actions" id="sentActions" hidden>
+        <button type="button" class="btn btn-outline" data-close>保留清單</button>
+        <button type="button" class="btn btn-primary" id="clearCart">清空購物清單</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">本網站需要啟用 JavaScript 才能顯示菜單及落單。</p></noscript>
+</body>
+</html>
