@@ -1711,3 +1711,46 @@ html.modal-open body {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* 首屏插圖站在一條地線上 */
+.hero-art {
+  position: relative;
+}
+.hero-art::after {
+  content: "";
+  position: absolute;
+  right: -8%;
+  bottom: 0;
+  left: -8%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+@media (max-width: 899px) {
+  .hero-art {
+    width: min(100%, 330px);
+    margin-top: -16px;
+  }
+}
+@media (min-width: 900px) {
+  .hero {
+    padding-bottom: 0;
+  }
+  .hero-inner {
+    min-height: min(calc(100vh - 68px), 620px);
+  }
+  .hero-copy {
+    padding-bottom: 48px;
+  }
+  .hero-art {
+    align-self: end;
+  }
+}
+/* 電話、WhatsApp 等連結加大點擊範圍 */
+.contact-value a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.contact-label + .contact-value {
+  margin-top: -6px;
+}

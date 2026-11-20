@@ -250,12 +250,9 @@
   function updateBar(sum, bump) {
     $("#cartCount").textContent = sum.qty;
     $("#cartBarTotal").textContent = C.money(sum.total);
-    $("#cartSub").textContent = sum.qty ? "按此查看及落單" : "未有餐點";
     bar.classList.toggle("is-empty", !sum.qty);
-    $("#cartOpen").setAttribute(
-      "aria-label",
-      sum.qty ? "購物清單：" + sum.qty + " 件，合共 " + C.money(sum.total) + "，按此查看及落單" : "購物清單：未有餐點"
-    );
+    // 用按鈕上可見的文字作為讀屏名稱（購物清單、件數、總額、查看）
+    $("#cartSub").textContent = sum.qty ? sum.qty + " 件・按此查看及落單" : "未有餐點";
     if (bump) {
       bar.classList.remove("bump");
       void bar.offsetWidth; // 重新觸發動畫
