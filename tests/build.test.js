@@ -77,3 +77,39 @@ test("關閉落單：沒有落單按鈕及提示", () => {
   assert.ok(!html.includes('id="order-help"'));
   assert.match(html, /查看菜單/);
 });
+
+const between = (html, start, end) => {
+  const i = html.indexOf(start);
+  return i < 0 ? "" : html.slice(i, html.indexOf(end, i) + end.length);
+};
+
+test("示範模式：發送按鈕不連到 wa.me，改開說明視窗及「我也想要這樣的網站」", () => {
+  const { html } = buildCopy();
+  const send = between(html, 'id="waSend"', "</button>");
+  assert.ok(send, "示範模式的發送鍵應是按鈕");
+  assert.ok(!/<a[^>]*id="waSend"/.test(html), "不應有 wa.me 發送連結");
+  const dialog = between(html, '<dialog class="modal" id="demoDialog"', "</dialog>");
+  assert.match(dialog, /這是示範網站。正式網站按下此按鈕後，會打開 WhatsApp 並自動填好以下訂單訊息，直接發送給店舖。/);
+  assert.match(dialog, /id="demoText"/);
+  assert.match(dialog, /<a class="btn btn-primary" id="demoCta" href="https:\/\/example\.com\/golive-web"[^>]*>我也想要這樣的網站<\/a>/);
+});
+
+test("正式模式：發送鍵是 wa.me 連結，沒有示範說明視窗", () => {
+  const { status, html } = buildCopy((s) =>
+    s.replace("demo: true,", "demo: false,").replace('whatsapp: "85200000000"', 'whatsapp: "85261234567"')
+  );
+  assert.equal(status, 0);
+  assert.match(html, /<a class="btn btn-wa" id="waSend" href="#" target="_blank" rel="noopener">/);
+  assert.ok(!html.includes('id="demoDialog"'));
+  assert.ok(!html.includes("我也想要這樣的網站"));
+});
+
+test("頁尾署名：「網站由 {名稱} 製作・查詢」；留空不顯示；沒有連結時只顯示名稱", () => {
+  const credit = (html) => visibleText(between(html, '<p class="footer-credit">', "</p>")).replace(/\s+/g, "");
+  assert.equal(credit(buildCopy().html), "網站由GoLiveWeb製作・查詢");
+  const none = buildCopy((s) => s.replace('name: "GoLive Web",', 'name: "",'));
+  assert.ok(!none.html.includes("footer-credit"));
+  const noUrl = buildCopy((s) => s.replace('url: "https://example.com/golive-web",', 'url: "",'));
+  assert.equal(credit(noUrl.html), "網站由GoLiveWeb製作");
+  assert.ok(!noUrl.html.includes("demoCta"), "沒有連結時不顯示「我也想要這樣的網站」");
+});

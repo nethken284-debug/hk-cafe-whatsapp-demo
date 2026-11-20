@@ -285,17 +285,13 @@
         <p class="modal-lead">以下訊息會經 WhatsApp 發送至「{{{name}}}」（<span id="previewNumber"></span>），請確認內容無誤。</p>
         <div class="chat"><pre class="bubble" id="previewText"></pre></div>
         <p class="fine">按「用 WhatsApp 發送」後，WhatsApp 會開啟並填好訊息，請在 WhatsApp 內再按一次發送。</p>
-        <p class="demo-note" id="demoNote" hidden>示範網站：WhatsApp 號碼為虛構，開啟後 WhatsApp 會提示號碼無效，這是正常的。</p>
         <div class="sent" id="sentPanel" hidden>
           <p><strong>已開啟 WhatsApp。</strong>在 WhatsApp 按發送後，請等候店舖回覆確認訂單。</p>
         </div>
       </div>
       <div class="sheet-foot modal-actions" id="previewActions">
         <button type="button" class="btn btn-outline" data-close>返回修改</button>
-        <a class="btn btn-wa" id="waSend" href="#" target="_blank" rel="noopener">
-          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5Z"/><path d="M9 9.5c.3 2.3 2.2 4.3 4.6 4.8l1.2-1.2 1.7.8"/></svg>
-          用 WhatsApp 發送
-        </a>
+        {{{sendButton}}}
       </div>
       <div class="sheet-foot modal-actions" id="sentActions" hidden>
         <button type="button" class="btn btn-outline" data-close>保留清單</button>
@@ -303,6 +299,10 @@
       </div>
     </div>
   </dialog>
+
+
+  <!-- 示範模式的說明視窗（只在 demo: true 時產生） -->
+  {{{demoDialog}}}
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

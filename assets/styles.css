@@ -1765,3 +1765,12 @@ html.modal-open body {
 .item-action .btn-add {
   text-decoration: none;
 }
+/* 製作者署名：連結加大點擊範圍 */
+.footer-credit a {
+  display: inline-block;
+  min-width: 44px;
+  padding: 10px 6px;
+  margin: -10px -4px;
+  text-align: center;
+  text-underline-offset: 3px;
+}

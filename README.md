@@ -4,9 +4,9 @@
 
 線上示範：<https://nethken284-debug.github.io/hk-cafe-whatsapp-demo/>
 
-| 手機版 | 選項 | 購物清單 | 訂單預覽 |
-| --- | --- | --- | --- |
-| ![手機首頁](screenshots/mobile-home.jpg) | ![選項](screenshots/mobile-options.jpg) | ![購物清單](screenshots/mobile-cart.jpg) | ![訂單預覽](screenshots/mobile-preview.jpg) |
+| 手機版 | 選項 | 購物清單 | 訂單預覽 | 示範模式發送 |
+| --- | --- | --- | --- | --- |
+| ![手機首頁](screenshots/mobile-home.jpg) | ![選項](screenshots/mobile-options.jpg) | ![購物清單](screenshots/mobile-cart.jpg) | ![訂單預覽](screenshots/mobile-preview.jpg) | ![示範模式發送](screenshots/mobile-demo-send.jpg) |
 
 ![電腦版](screenshots/desktop-home.jpg)
 
@@ -22,6 +22,7 @@
   - 取餐資料：稱呼、自取（日期＋時間）或堂食（枱號）、備註
   - 檢查：清單不能是空的；自取時間必須在營業時間內，而且最少比現在晚 N 分鐘（以香港時間計算）
   - 發送前先顯示「訂單預覽」，確認後以 `https://wa.me/<號碼>?text=<訊息>` 開啟 WhatsApp（手機開 App，電腦開 WhatsApp Web）
+  - **示範模式**（`demo: true`）按「用 WhatsApp 發送」不會開啟 WhatsApp，改為顯示說明視窗及完整訂單訊息，並有「我也想要這樣的網站」按鈕連到製作者聯絡連結；`demo: false` 時才會真正發送
   - 價錢一律用整數計算；購物清單存於瀏覽器（localStorage），重新整理不會消失
   - 整個落單功能可以一鍵關閉
 - **店舖內容預先渲染成靜態 HTML**：建置時由 `config.js` 產生，不執行 JavaScript 也能看到首屏、關於我們、菜單、營業時間、地址等全部資料（搜尋引擎及分享工具亦讀得到）；JavaScript 只負責落單互動。停用 JavaScript 時，「加入」按鈕會帶到提示，請客人直接 WhatsApp 落單
@@ -81,6 +82,7 @@ tests/core.test.js        ← 自動測試
    | `order` | 落單開關、自取／堂食、最少提前分鐘數、可預訂日數 |
    | `optionGroups` | 選項及加價（溫度、甜度等） |
    | `menu` | 菜單分類及項目：名稱、價錢（整數）、描述、選項、售罄、標籤 |
+   | `credit` | 頁尾製作者署名「網站由 {name} 製作・查詢」及連結 `url`；`name` 留空則不顯示 |
 
 3. **換分享預覽圖**（在 WhatsApp、Facebook、Carousell 貼連結時顯示的圖片），二選一：
    - 用店舖自己的相片，裁成 **1200×630**，存成 JPG（最好 300KB 以下），放到 `assets/`，再在 `config.js` 的 `share.image` 填上檔名；或
@@ -198,7 +200,7 @@ size: {
 node --test
 ```
 
-自動測試涵蓋：建置後的靜態 HTML 包含全部店舖資料、示範／正式模式的 noindex 規則、關閉落單、訊息格式及金額（包括上面的例子）、`wa.me` 連結編碼、相同選項合併、數量上限、售罄、非整數價錢、香港時區、營業時間外、時間太近、夜晚只可選明日、堂食檢查、空清單。
+自動測試涵蓋：示範模式不開啟 WhatsApp（說明視窗及「我也想要這樣的網站」）、正式模式的 wa.me 發送連結、頁尾署名、建置後的靜態 HTML 包含全部店舖資料、示範／正式模式的 noindex 規則、關閉落單、訊息格式及金額（包括上面的例子）、`wa.me` 連結編碼、相同選項合併、數量上限、售罄、非整數價錢、香港時區、營業時間外、時間太近、夜晚只可選明日、堂食檢查、空清單。
 
 在瀏覽器測試不同時間：打開網站後，在開發者工具 Console 輸入
 `ShopCore.setNow("2026-11-20T12:00:00+08:00")`，之後打開購物清單便會以這個時間檢查（重新整理後還原）。
@@ -222,7 +224,7 @@ node --test
 ## 新客人上線檢查清單
 
 - [ ] `config.js` 的 `id` 已改為新店舖代號
-- [ ] `demo` 已改為 **`false`**（頁尾不再顯示「示範作品」，搜尋引擎可以收錄）
+- [ ] `demo` 已改為 **`false`**（頁尾不再顯示「示範作品」，搜尋引擎可以收錄，「用 WhatsApp 發送」會真正開啟 WhatsApp）
 - [ ] WhatsApp 號碼已換成店舖號碼（852 開頭、只填數字），電話亦已更新
 - [ ] 分享預覽圖已換成這間店的圖片（1200×630），`share.image` 指向正確檔案
 - [ ] `share.siteUrl` 已改為最終網址（結尾有 `/`）
@@ -230,6 +232,7 @@ node --test
 - [ ] 營業時間、休息日、`timeZone` 正確
 - [ ] 菜單價錢全部是整數；選項加價正確；售罄項目已標記
 - [ ] `order.enabled`、`pickup`、`dineIn`、`leadMinutes`、`advanceDays` 符合店舖要求
+- [ ] `credit` 署名及連結正確（如客人不想顯示，把 `name` 留空）
 - [ ] 主色已按店舖品牌調整，按鈕白字清楚易讀
 - [ ] 執行 `node build.js` 沒有錯誤，`node --test` 全部通過
 - [ ] 已部署，並在 WhatsApp 貼一次網址，確認分享預覽圖及標題正確

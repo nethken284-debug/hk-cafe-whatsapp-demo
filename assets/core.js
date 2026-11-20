@@ -175,7 +175,7 @@
 
     const t = cfg.theme || {};
     const a = cfg.about || {};
-    const f = cfg.footer || {};
+    const cr = cfg.credit || {};
     return {
       id: str(cfg.id).toLowerCase().replace(/[^a-z0-9-]+/g, "-") || "shop",
       demo: !!cfg.demo,
@@ -203,7 +203,7 @@
       groups,
       items,
       categories,
-      footer: { credit: str(f.credit), creditUrl: str(f.creditUrl) },
+      credit: { name: str(cr.name), url: /^https?:\/\//i.test(str(cr.url)) ? str(cr.url) : "" },
       warnings,
     };
   }
@@ -515,6 +515,10 @@
   const waUrl = (number, text) =>
     "https://wa.me/" + digits(number) + (text ? "?text=" + encodeURIComponent(text) : "");
 
+  // 發送訂單：示範模式不開啟 WhatsApp，只顯示說明；正式模式回傳 wa.me 連結
+  const sendTarget = (model, text) =>
+    model.demo ? { demo: true, url: "" } : { demo: false, url: waUrl(model.contact.whatsapp, text) };
+
   return {
     WEEKDAYS,
     str,
@@ -551,5 +555,6 @@
     validateOrder,
     buildMessage,
     waUrl,
+    sendTarget,
   };
 });

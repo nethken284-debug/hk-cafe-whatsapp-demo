@@ -467,13 +467,14 @@
 
   /* ---------- 訂單預覽及發送 ---------- */
   const preview = $("#previewDialog");
-  const waLink = $("#waSend");
+  const waLink = $("#waSend"); // 正式模式是 wa.me 連結；示範模式是按鈕（由 build.js 產生）
+  const demoDialog = $("#demoDialog");
 
   function showPreview(msg) {
     $("#previewText").textContent = msg;
     $("#previewNumber").textContent = C.phoneText(M.contact.whatsapp);
-    waLink.href = C.waUrl(M.contact.whatsapp, msg);
-    $("#demoNote").hidden = !M.demo;
+    const target = C.sendTarget(M, msg);
+    if (!target.demo) waLink.href = target.url;
     $("#sentPanel").hidden = true;
     $("#sentActions").hidden = true;
     $("#previewActions").hidden = false;
@@ -487,6 +488,15 @@
       e.preventDefault();
       closeDialog(preview);
       form.requestSubmit();
+      return;
+    }
+    if (C.sendTarget(M, "").demo) {
+      // 示範模式：不開啟 WhatsApp，改為顯示說明及完整訂單訊息
+      e.preventDefault();
+      if (demoDialog) {
+        $("#demoText").textContent = $("#previewText").textContent;
+        openDialog(demoDialog);
+      }
       return;
     }
     setTimeout(() => {

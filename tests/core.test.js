@@ -169,3 +169,19 @@ test("預訂明日：訊息附日期；輸入內容會清理", () => {
   assert.match(msg, /^檸檬撻 ×2　\$72$/m);
   assert.match(msg, /^備註：少冰 多謝$/m);
 });
+
+test("發送：示範模式不開啟 WhatsApp，正式模式回傳 wa.me 連結", () => {
+  const msg = "【新訂單】\n稱呼：陳先生";
+  assert.deepEqual(C.sendTarget(M, msg), { demo: true, url: "" });
+  const prod = C.normalize(Object.assign({}, RAW, { demo: false }));
+  const t = C.sendTarget(prod, msg);
+  assert.equal(t.demo, false);
+  assert.equal(t.url, "https://wa.me/85200000000?text=" + encodeURIComponent(msg));
+});
+
+test("製作者署名設定", () => {
+  assert.deepEqual(M.credit, { name: "GoLive Web", url: "https://example.com/golive-web" });
+  const bad = C.normalize(Object.assign({}, RAW, { credit: { name: "X", url: "javascript:alert(1)" } }));
+  assert.equal(bad.credit.url, "", "只接受 http(s) 連結");
+  assert.deepEqual(C.normalize(Object.assign({}, RAW, { credit: undefined })).credit, { name: "", url: "" });
+});
