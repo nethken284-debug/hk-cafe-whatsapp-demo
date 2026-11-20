@@ -2,7 +2,9 @@
 /* ==========================================================================
    建置腳本：node build.js
    讀取 config.js，產生 dist/ 資料夾（部署時發布 dist/）：
-   ・自動寫入 <title>、description、分享預覽（og:）標籤及網站小圖示
+   ・把店舖資料（首屏、關於我們、菜單、營業時間、地址、頁尾）預先渲染成靜態 HTML，
+     不執行 JavaScript 也能看到全部內容；JavaScript 只負責落單互動
+   ・自動寫入 <title>、description、分享預覽（og:）標籤、顏色及網站小圖示
    ・demo: true  → 加入 noindex（示範網站不讓搜尋引擎收錄）
    ・demo: false → 一定沒有 noindex，並加入搜尋引擎用的店舖資料（JSON-LD）
    只需要 Node.js 18 或以上，不需要安裝任何套件。
@@ -12,12 +14,13 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 const C = require("./assets/core.js");
+const { render, fontChars } = require("./lib/render.js");
 
 const ROOT = __dirname;
 const OUT = path.join(ROOT, "dist");
 // 這些檔案或資料夾不會發布
 const SKIP = new Set([
-  "dist", "node_modules", "tests", "tools", "screenshots", "build.js", "deploy-github-pages.sh",
+  "dist", "node_modules", "lib", "tests", "tools", "screenshots", "build.js", "deploy-github-pages.sh",
   "README.md", "package.json",
 ]);
 
@@ -103,6 +106,20 @@ const head = [
   meta("name", "twitter:description", desc),
   meta("name", "twitter:image", abs(image)),
   `<link rel="icon" href="favicon.svg" type="image/svg+xml">`,
+  // 顏色（config.js 的 theme）
+  `<style>:root{` +
+    ["brand", "accent", "ink", "paper"]
+      .filter((k) => isColor(M.theme[k]))
+      .map((k) => `--${k}:${M.theme[k]}`)
+      .join(";") +
+    `}</style>`,
+  // 標題字型：只下載頁面用到的字，非同步載入，不阻擋顯示
+  M.theme.webFont
+    ? `<link rel="stylesheet" media="print" onload="this.media='all'" href="${esc(
+        "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500&family=Noto+Serif+TC:wght@700&display=swap&text=" +
+          encodeURIComponent(fontChars(M))
+      )}">`
+    : "",
 ];
 
 if (!M.demo) {
@@ -133,9 +150,12 @@ if (!M.demo) {
 
 /* ---------- 4. 輸出 dist/ ---------- */
 const src = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-const MARK = /<!-- build:head[\s\S]*?<!-- \/build:head -->/;
-if (!MARK.test(src)) fail("index.html 缺少 <!-- build:head --> … <!-- /build:head --> 標記");
-const html = src.replace(MARK, head.filter(Boolean).join("\n  "));
+const parts = Object.assign(render(M), { head: head.filter(Boolean).join("\n  ") });
+const html = src.replace(/\{\{\{(\w+)\}\}\}/g, (all, key) => {
+  if (!(key in parts)) fail("index.html 有未知的標記：" + all);
+  return parts[key];
+});
+if (/\{\{\{/.test(html)) fail("index.html 仍有未處理的標記");
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT);

@@ -72,6 +72,7 @@
   const dialogs = $$("dialog");
   function openDialog(d) {
     if (!d.open) d.showModal();
+    d.dataset.openedAt = String(Date.now());
     root.classList.add("modal-open");
   }
   function closeDialog(d) {
@@ -82,7 +83,9 @@
       if (!dialogs.some((x) => x.open)) root.classList.remove("modal-open");
     });
     d.addEventListener("click", (e) => {
-      if (e.target === d || e.target.closest("[data-close]")) d.close(); // 點背景或關閉按鈕
+      // 點背景或關閉按鈕關閉；視窗剛打開（滑入動畫期間）時誤觸背景不會關閉
+      if (e.target === d && Date.now() - Number(d.dataset.openedAt || 0) < 400) return;
+      if (e.target === d || e.target.closest("[data-close]")) d.close();
     });
   });
 

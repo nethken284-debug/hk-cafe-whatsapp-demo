@@ -1688,19 +1688,6 @@ html:not(.has-order) .toast {
 }
 
 /* ---------- 17. 補充 ---------- */
-/* 內容由 JavaScript 產生，產生前先隱藏，避免畫面跳動（3 秒後無論如何都會顯示） */
-.js:not(.ready) .topbar,
-.js:not(.ready) .hero-inner,
-.js:not(.ready) main,
-.js:not(.ready) .site-footer {
-  visibility: hidden;
-  animation: reveal 0s 3s forwards;
-}
-@keyframes reveal {
-  to {
-    visibility: visible;
-  }
-}
 html.modal-open body {
   overflow: hidden;
 }
@@ -1753,4 +1740,28 @@ html.modal-open body {
 }
 .contact-label + .contact-value {
   margin-top: -6px;
+}
+
+/* 未啟用 JavaScript 時的落單提示 */
+.nojs-note {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border: 1.5px dashed var(--brand);
+  border-radius: var(--radius);
+  background: var(--paper);
+  font-size: 0.9375rem;
+}
+.nojs-note a {
+  color: var(--brand);
+  font-weight: 800;
+}
+.btn-add.is-off {
+  padding: 0 18px;
+  border-style: dashed;
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--ink-2);
+}
+.item-action .btn-add {
+  text-decoration: none;
 }
